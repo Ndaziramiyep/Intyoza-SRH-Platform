@@ -1,0 +1,4 @@
+Put trusted SRH documents here (PDF, TXT or MD). Then run:  python build_documents.py
+Use only official or well-known sources (Ministry of Health, RBC, WHO, UNFPA, UNESCO, UNICEF, REB).
+Give files clear names, for example WHO_Family_Planning_Handbook_2022.pdf: the name is shown as the source.
+Scanned PDFs (images of pages) cannot be read; use PDFs with selectable text.

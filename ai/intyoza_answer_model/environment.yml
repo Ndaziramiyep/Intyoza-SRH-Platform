@@ -1,0 +1,28 @@
+name: intyoza
+# Create once (Anaconda Prompt, in the Intyoza folder):  conda env create -f environment.yml
+# Already created before?                               conda env update -f environment.yml
+# Offline document answers also need llama-cpp-python (see README.txt, LEARN FROM DOCUMENTS).
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pip
+  - numpy
+  - pandas
+  - scikit-learn
+  - joblib
+  - openpyxl
+  - matplotlib
+  - notebook
+  - ipykernel
+  - ipywidgets
+  - pypdf
+  - sentencepiece
+  - pip:
+      - torch
+      - sentence-transformers
+      - transformers
+      - accelerate
+      - datasets
+      - huggingface_hub
+      - gradio

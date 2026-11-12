@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="rw">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content" />
+    <meta name="description" content="Intyoza: private, youth-friendly sexual and reproductive health guidance, services, community and learning." />
+    <meta name="theme-color" content="#6c4ab6" />
+    <script>
+      // Apply a saved light/dark choice before the first paint (no flash of the wrong theme).
+      try {
+        var t = JSON.parse(localStorage.getItem('intyoza.theme') || sessionStorage.getItem('intyoza.theme') || 'null')
+        if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t
+      } catch (e) {}
+    </script>
+    <title>Intyoza: Your SRH Guide</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

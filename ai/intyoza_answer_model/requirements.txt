@@ -1,0 +1,21 @@
+# Intyoza AI service (Python 3.10+). GPU optional; needed for the language model.
+numpy
+pandas
+scikit-learn
+joblib
+openpyxl
+matplotlib
+pypdf
+sentencepiece
+torch
+sentence-transformers>=3.3
+transformers
+accelerate
+datasets
+huggingface_hub
+gradio
+fastapi
+uvicorn
+requests
+peft
+bitsandbytes

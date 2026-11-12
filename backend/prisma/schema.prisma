@@ -1,0 +1,304 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// --- OTHER DEVELOPER'S AI TABLES ---
+model conversations {
+  id         String     @id @db.Uuid
+  client_id  String     @db.Uuid
+  title      String     @default("")
+  created_at DateTime   @default(now()) @db.Timestamptz(6)
+  updated_at DateTime   @default(now()) @db.Timestamptz(6)
+  messages   messages[]
+
+  @@index([client_id, updated_at(sort: Desc)], map: "conversations_client_idx")
+}
+
+model messages {
+  id              BigInt        @id @default(autoincrement())
+  conversation_id String        @db.Uuid
+  role            String
+  content         String
+  reply           Json?
+  created_at      DateTime      @default(now()) @db.Timestamptz(6)
+  conversations   conversations @relation(fields: [conversation_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([conversation_id, id], map: "messages_conversation_idx")
+}
+
+// --- INTYOZA CORE TABLES ---
+model User {
+  id            String   @id @default(uuid()) @db.Uuid
+  email         String   @unique
+  passwordHash  String?
+  googleId      String?  @unique
+  alias         String?  @unique // Community username
+  oauthProvider String?
+  oauthId       String?
+  ageBand       AgeBand  @default(UNKNOWN)
+  gender        Gender   @default(PREFER_NOT_TO_SAY)
+  district      String?
+  language      Language @default(EN)
+  role          Role     @default(USER)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  consents        Consent[]
+  aiSessions      AIChatSession[]
+  posts           Post[]
+  comments        Comment[]
+  reports         Report[]
+  proReferrals    ProReferral[]
+  moderatedSpaces CommunitySpace[] @relation("ModeratedSpaces")
+
+  @@index([email])
+}
+
+enum AgeBand {
+  UNKNOWN
+  AGE_10_14
+  AGE_15_19
+  AGE_20_24
+  AGE_25_PLUS
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+  PREFER_NOT_TO_SAY
+}
+
+enum Language {
+  EN
+  RW
+}
+
+enum Role {
+  USER
+  MODERATOR
+  ADMIN
+}
+
+model Consent {
+  id        String      @id @default(uuid()) @db.Uuid
+  userId    String      @db.Uuid
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      ConsentType
+  version   String
+  granted   Boolean
+  grantedAt DateTime    @default(now())
+
+  @@index([userId, type])
+}
+
+enum ConsentType {
+  TERMS
+  PRIVACY
+  AI_CHAT_STORAGE
+  COMMUNITY_PARTICIPATION
+  SHARE_SERVICE_SUGGESTIONS
+}
+
+// --- AI CHAT ---
+model AIChatSession {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @db.Uuid
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  language  Language @default(EN)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  messages AIChatMessage[]
+}
+
+model AIChatMessage {
+  id        String        @id @default(uuid()) @db.Uuid
+  sessionId String        @db.Uuid
+  session   AIChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  role      MessageRole
+  content   String        @db.Text
+  escalate  Boolean       @default(false)
+  createdAt DateTime      @default(now())
+}
+
+enum MessageRole {
+  USER
+  ASSISTANT
+}
+
+// --- LEARNING HUB ---
+model Category {
+  id       String    @id @default(uuid()) @db.Uuid
+  slug     String    @unique
+  nameEn   String
+  nameRw   String
+  articles Article[]
+}
+
+model Article {
+  id          String        @id @default(uuid()) @db.Uuid
+  categoryId  String        @db.Uuid
+  category    Category      @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  language    Language
+  title       String
+  content     String        @db.Text
+  format      ContentFormat @default(ARTICLE)
+  isLowData   Boolean       @default(false)
+  published   Boolean       @default(true)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+enum ContentFormat {
+  ARTICLE
+  VIDEO
+  AUDIO
+  QUIZ
+}
+
+// --- MYTH BUSTER ---
+model Myth {
+  id       String   @id @default(uuid()) @db.Uuid
+  language Language
+  mythText String
+  factText String   @db.Text
+  sources  String[]
+}
+
+// --- YOUTH HEALTH CONNECT ---
+enum AvailabilityStatus {
+  YES
+  LIKELY
+  NO
+  UNKNOWN
+}
+
+enum FacilityOwnership {
+  PUBLIC
+  FAITH_BASED
+  PRIVATE
+  UNKNOWN
+}
+
+enum ServiceCostType {
+  FREE
+  SUBSIDIZED
+  PAID
+  UNKNOWN
+}
+
+model Facility {
+  id              String              @id @default(uuid()) @db.Uuid
+  name            String
+  facilityType    String?
+  ownership       FacilityOwnership   @default(UNKNOWN)
+  province        String?
+  district        String
+  sector          String?
+  cell            String?
+  address         String?
+  latitude        Float
+  longitude       Float
+  phone           String?
+  openingHours    String?
+  isYouthFriendly AvailabilityStatus  @default(UNKNOWN)
+  isIsange        AvailabilityStatus  @default(UNKNOWN)
+  showInApp       Boolean             @default(true)
+  verifiedAt      DateTime?           
+
+  services FacilityService[]
+}
+
+model FacilityService {
+  id          String             @id @default(uuid()) @db.Uuid
+  facilityId  String             @db.Uuid
+  facility    Facility           @relation(fields: [facilityId], references: [id], onDelete: Cascade)
+  serviceName String             
+  status      AvailabilityStatus @default(UNKNOWN)
+  costType    ServiceCostType    @default(UNKNOWN)
+}
+
+// --- COMMUNITY ---
+model CommunitySpace {
+  id          String @id @default(uuid()) @db.Uuid
+  name        String
+  description String
+  imageUrl    String?
+  isModerated Boolean @default(true)
+
+  moderatorId String? @db.Uuid
+  moderator   User?   @relation("ModeratedSpaces", fields: [moderatorId], references: [id], onDelete: SetNull) 
+  posts       Post[]
+}
+
+model Post {
+  id        String         @id @default(uuid()) @db.Uuid
+  spaceId   String         @db.Uuid
+  space     CommunitySpace @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  userId    String         @db.Uuid
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  content   String         @db.Text
+  isHidden  Boolean        @default(false)
+  createdAt DateTime       @default(now())
+
+  comments  Comment[]
+  reports   Report[]
+}
+
+model Comment {
+  id        String   @id @default(uuid()) @db.Uuid
+  postId    String   @db.Uuid
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId    String   @db.Uuid
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  content   String   @db.Text
+  isHidden  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  
+  reports   Report[]
+}
+
+model Report {
+  id         String   @id @default(uuid()) @db.Uuid
+  reporterId String   @db.Uuid
+  reporter   User     @relation(fields: [reporterId], references: [id])
+  postId     String?  @db.Uuid
+  post       Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  commentId  String?  @db.Uuid
+  comment    Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  reason     String
+  status     ReportStatus @default(PENDING)
+  createdAt  DateTime @default(now())
+}
+
+enum ReportStatus {
+  PENDING
+  RESOLVED
+  DISMISSED
+}
+
+// --- PROFESSIONALS (Phase 2) ---
+model ProReferral {
+  id            String         @id @default(uuid()) @db.Uuid
+  userId        String         @db.Uuid
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contactMethod String         
+  topic         String?        
+  status        ReferralStatus @default(PENDING)
+  notes         String?        @db.Text 
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+enum ReferralStatus {
+  PENDING
+  CONTACTED
+  RESOLVED
+  CANCELLED
+}

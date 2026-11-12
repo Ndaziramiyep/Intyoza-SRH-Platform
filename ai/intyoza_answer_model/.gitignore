@@ -1,0 +1,20 @@
+# trained and downloaded models are too large for GitHub (download intyoza_models.zip from Drive into models/)
+models/
+base_model/
+matcher-checkpoints/
+intyoza_models.zip
+# private: messages young people sent that had no answer
+intyoza_unanswered.csv
+error_report.csv
+__pycache__/
+.ipynb_checkpoints/
+# DEMO data (public datasets for the demo; some are non-commercial): downloaded in Colab, never committed
+demo_data/
+documents/DEMO_*
+open_question_review.csv
+intyoza_writer.zip
+models/intyoza_writer_checkpoint/
+.intyoza_service_key
+csv_export/
+# trusted PDFs are large: keep them in Drive / Kaggle, list them in documents/SOURCES.json
+documents/*.pdf

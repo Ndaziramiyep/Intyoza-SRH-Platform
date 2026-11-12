@@ -1,0 +1,22 @@
+Trusted documents Intyoza reads from (every PDF, TXT and MD in this folder; listed in SOURCES.json)
+
+UNFPA_Rwanda_CSE_Reference_Book_S1-S6_2019.pdf            UNFPA Rwanda: Comprehensive Sexuality Education reference book, S1-S6, 2019
+Rwanda_HIV_Prevention_Treatment_Care_Guidelines_2022.pdf  Rwanda Biomedical Centre (RBC): National guidelines for HIV prevention, treatment and care, 2022
+UNESCO_Technical_Guidance_Sexuality_Education_2018.pdf    UNESCO: International technical guidance on sexuality education (revised), 2018
+WHO_Family_Planning_Handbook_2022.pdf                     WHO / Johns Hopkins CCP: Family Planning: a global handbook for providers, 2022
+WHO_Adolescent_SRHR_Recommendations_2018.pdf              WHO: WHO recommendations on adolescent sexual and reproductive health and rights, 2018
+WHO_Adolescent_Contraception_Recommendations_2017.pdf     WHO: WHO adolescent contraception summary, 2017
+Menstrual_Health_Booklet_2015.txt                         UNICEF / Save the Children / IMC: Growing Healthy: things that girls need to know, 2015
+Rwanda_Ministerial_Order_Abortion_Conditions_2019.pdf     Ministry of Health: Ministerial Order N°002/MoH/2019 of 08/04/2019 determining conditions to be satisfied for a medical doctor to perform an abortion, 2019
+Rwanda_Law_026-2025_Healthcare_Services_2025.pdf          Republic of Rwanda: Law N° 026/2025 of 17/09/2025 regulating healthcare services (Official Gazette n° Special of 18/09/2025), 2025
+Rwanda_Ministerial_Order_Abortion_002-MoH-2024.pdf        Ministry of Health: Ministerial Order N° 002/MoH/2024 of 29/11/2024 amending Ministerial Order N° 002/MoH/2019 on the conditions for abortion (Official Gazette n° 50 Bis of 09/12/2024), 2024
+MoH_Agaciro_Kanjye_Youth_Booklet_Kinyarwanda_2012.pdf     Ministry of Health with Imbuto Foundation, RBC and Caritas Rwanda: Agaciro Kanjye: agatabo kagenewe urubyiruko rufite imyaka hagati ya 15 na 24, 2012
+Imbuto_RBC_Tuganire_Mwana_Wanjye_Kinyarwanda_2026.pdf     Imbuto Foundation and Rwanda Biomedical Centre (RBC): Tuganire Mwana Wanjye: twimakaze umuco wo kuganira mu muryango (revised edition), 2026
+Rwanda_FP_ASRH_Strategic_Plan_2018-2024.pdf               Ministry of Health: National Family Planning and Adolescent Sexual and Reproductive Health (FP/ASRH) Strategic Plan 2018-2024, 2018
+WHO_Medical_Eligibility_Criteria_Contraception_2025.pdf   WHO: Medical eligibility criteria for contraceptive use, sixth edition, 2025
+WHO_STI_Management_Guidelines_2021.pdf                    WHO: Guidelines for the management of symptomatic sexually transmitted infections, 2021
+WHO_Adolescent_Mental_Health_Guidelines_2020.pdf          WHO: Guidelines on mental health promotive and preventive interventions for adolescents: helping adolescents thrive, 2020
+
+The PDFs are not in git (too large). Get them from the Kaggle dataset (Intyoza.zip, documents/), or from the "link" in SOURCES.json.
+To add a document: put the file here, add an entry to SOURCES.json (file, title, publisher, year, note, url or link),
+then rebuild the document index (4_Train_Answer_Model_Colab.ipynb step 3, or get_documents.prepare()).
