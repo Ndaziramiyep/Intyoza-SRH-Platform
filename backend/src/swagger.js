@@ -10,8 +10,10 @@ const swaggerDefinition = {
   },
   servers: [
     {
-      url: `http://localhost:${config.port}`,
-      description: 'Local development server',
+      // Relative URL: "Try it out" calls whichever host served the docs
+      // (localhost in dev, the Vercel domain in production).
+      url: '/',
+      description: 'This server',
     },
   ],
   tags: [
