@@ -634,7 +634,18 @@ export const swaggerSpec = swaggerJsdoc({
   apis: [], 
 });
 
+// Swagger UI's own JS/CSS are loaded from a CDN because Vercel's serverless
+// bundle doesn't include swagger-ui-dist's static files, so serving them from
+// /api-docs returned HTML and the page broke. Keep the version in sync with
+// node_modules/swagger-ui-dist.
+const SWAGGER_UI_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.34.0';
+
 export const swaggerUiOptions = {
   explorer: true,
   customSiteTitle: 'Intyoza API Docs',
+  customCssUrl: `${SWAGGER_UI_CDN}/swagger-ui.min.css`,
+  customJs: [
+    `${SWAGGER_UI_CDN}/swagger-ui-bundle.min.js`,
+    `${SWAGGER_UI_CDN}/swagger-ui-standalone-preset.min.js`,
+  ],
 };
